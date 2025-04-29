@@ -1,4 +1,4 @@
-# Security Guard — Doce de Leite (v0.1.0-SNAPSHOT)
+# Security Guard — Doce de Leite (v0.1.1-SNAPSHOT)
 
 **Security Guard** é um módulo de autenticação e autorização do framework **Soejin**, desenvolvido com **Java 21**, **Spring Boot** e **Spring Security**. Ele fornece uma base robusta e extensível para o gerenciamento de usuários, controle de acesso, definição de perfis de usuários e suporte a múltiplos sistemas.
 

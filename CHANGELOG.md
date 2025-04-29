@@ -4,7 +4,7 @@ Este arquivo documenta todas as alterações relevantes do módulo **Security Gu
 
 ---
 
-## [Unreleased]
+## [0.1.1]  2025-04-29
 - 📝 **docs:** Adicionado `CHANGELOG.md`
 - 📝 **docs:** Adicionado `README.md`
 - 🎯 **chore:** Preparação da versão **0.2.0-SNAPSHOT**
