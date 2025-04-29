@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: security
+
+  # Database Configuration
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/security_guard
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:Admin@123}
+    driverClassName: org.postgresql.Driver
+
+  # Email Configuration for Password Recovery
+  mail:
+    host: smtp.example.com
+    port: 587
+    username: your-email@example.com
+    password: your-email-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# JWT Configuration
+security:
+  jwt:
+    secret-key: ${SECRET_KEY:UmaChaveSecretaMuitoLongaEComplexaComNoMinimo64Caracteres} # <-- Nome corrigido
+    expiration: 86400000       # 24 horas
+    refresh-token:
+      expiration: 604800000    # 7 dias
+
+# Server Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
