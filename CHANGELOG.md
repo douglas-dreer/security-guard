@@ -5,9 +5,9 @@ Este arquivo documenta todas as alterações relevantes do módulo **Security Gu
 ---
 
 ## [0.1.1]  2025-04-29
-- 📝 **docs:** Adicionado `CHANGELOG.md`
+- `0d3742a` 📝 **docs:** Adicionado `CHANGELOG.md`
 - 📝 **docs:** Adicionado `README.md`
-- 🎯 **chore:** Preparação da versão **0.2.0-SNAPSHOT**
+- 🎯 **chore:** Preparação da versão **0.1.1-SNAPSHOT**
     - Atualizar dependências de segurança (Spring Security, JWT)
     - Refinar fluxo de autenticação multi-sistema
     - Ampliar cobertura de testes e tratar edge cases
