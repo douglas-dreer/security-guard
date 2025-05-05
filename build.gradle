@@ -29,7 +29,6 @@ repositories {
 
 ext {
     set('snippetsDir', file('build/generated-snippets'))
-    // Definição de versões dinâmicas
     set('jjwtVersion', '0.12.+')
     set('mapstructVersion', '1.5.+')
     set('springDocVersion', '2.+')

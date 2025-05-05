@@ -1,6 +1,27 @@
 # Changelog
 
-Este arquivo documenta todas as alterações relevantes do módulo **Security Guard** do framework **Soejin**, seguindo o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o versionamento [SemVer](https://semver.org/lang/pt-BR/spec/v2.0.0.html). Utilizamos **ícones** para facilitar a identificação de cada categoria de mudança.
+Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
+
+O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
+e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
+
+## [1.0.0] - 2024-04-29
+
+### ✨ Adicionado
+- Estrutura inicial do projeto
+- Configuração do Spring Security
+- Serviços de autenticação e autorização
+- Documentação JavaDoc dos principais componentes
+- Script de atualização de versão automatizado
+
+### 🔧 Alterado
+- Nenhuma alteração significativa
+
+### 🐛 Corrigido
+- Nenhuma correção significativa
+
+### 🗑️ Removido
+- Nenhuma remoção significativa
 
 ---
 

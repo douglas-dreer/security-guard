@@ -52,9 +52,13 @@ public class UserServiceImpl implements UserService {
                 .username(username).email(email)
                 .password(passwordEncoder.encode(password))
                 .roles(roleDefault)
+                .enabled(true)
+                .accountNonExpired(false)
+                .accountNonLocked(false)
+                .credentialsNonExpired(false)
                 .build();
 
-        validateUserToCreate(user);
+            validateUserToCreate(user);
 
         return userRepository.save(user);
     }

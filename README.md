@@ -1,106 +1,72 @@
-# Security Guard — Doce de Leite (v0.1.1-SNAPSHOT)
+# Security Guard
 
-**Security Guard** é um módulo de autenticação e autorização do framework **Soejin**, desenvolvido com **Java 21**, **Spring Boot** e **Spring Security**. Ele fornece uma base robusta e extensível para o gerenciamento de usuários, controle de acesso, definição de perfis de usuários e suporte a múltiplos sistemas.
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Java](https://img.shields.io/badge/java-17-orange.svg)
+![Spring Boot](https://img.shields.io/badge/spring%20boot-3.2.0-green.svg)
+![License](https://img.shields.io/badge/license-MIT-yellow.svg)
 
-> 🍬 **Codinome da versão**: Doce de Leite — uma homenagem à tradição mineira.
+Módulo de segurança do framework Soejin, responsável por gerenciar autenticação e autorização de usuários.
 
----
+## 🚀 Funcionalidades
 
-## ✨ Funcionalidades
+- Autenticação de usuários
+- Gerenciamento de tokens JWT
+- Autorização baseada em roles
+- Documentação JavaDoc completa
+- Script de atualização de versão automatizado
 
-- 🔒 Autenticação baseada em JWT
-- 👤 Gerenciamento de usuários
-- 🢑 Controle de roles e permissões
-- 🌐 Suporte a múltiplos sistemas (multi-tenant logic)
-- 🔄 Rotinas de redefinição de senha e expiração
-- 🥒 Registro de login e controle de status de conta
-- 📦 Pronto para integração com outros módulos do **Soejin Framework**
+## 📋 Pré-requisitos
 
----
+- Java 21 ou superior
+- Maven 3.8 ou superior
+- Git
 
-## ⚙️ Tecnologias
+## 🔧 Instalação
 
-- **Java 21**
-- **Spring Boot 3**
-- **Spring Security**
-- **Spring Data JPA**
-- **PostgreSQL**
-- **JWT (JSON Web Token)**
-
----
-
-## 📁 Estrutura Padrão
-
-```
-src/
- ├── main/
- │   ├── java/
- │   │   └── br/com/soejin/framework/security_guard/
- │   │       ├── configs/         📑 Configurações de segurança
- │   │       ├── controller/      📡 Controladores de API
- │   │       │   ├── api/          🔗 Endpoints de autenticação
- │   │       │   ├── mapper/       🔄 Mapeadores de DTOs
- │   │       │   ├── request/      📥 Requisições da API
- │   │       │   └── response/     📤 Respostas da API
- │   │       ├── exception/        🚨 Tratamento de exceções
- │   │       ├── model/            🧩 Modelos de domínio
- │   │       ├── repository/       💾 Repositórios JPA
- │   │       ├── service/          🔧 Serviços
- │   │       │   └── impl/         🛠️ Implementações de serviços
- │   │       └── util/             🧰 Utilitários
- │   └── resources/
- │       ├── db/
- │       │   └── migration/        🗄️ Scripts de migração Flyway
- │       ├── static/               🖼️ Arquivos estáticos (se aplicável)
- │       └── templates/            📝 Templates (se aplicável)
- └── test/
-     └── java/
-         └── br/com/soejin/framework/security_guard/  🧪 Testes unitários e de integração
+1. Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/security-guard.git
 ```
 
----
+2. Entre no diretório do projeto:
+```bash
+cd security-guard
+```
 
-## 🚀 Execução
+3. Instale as dependências:
+```bash
+mvn install
+```
 
-Para rodar o projeto localmente:
+## 🛠️ Uso
+
+Para executar o projeto:
 
 ```bash
-  ./gradlew clean bootRun
+mvn spring-boot:run
 ```
 
----
+## 📝 Documentação
 
-## 🧪 Testes
-
-Execute os testes com cobertura:
-
-```bash
-  ./gradlew clean test
-```
-
----
-
-## 📌 Requisitos
-
-- Java 21
-- PostgreSQL 15+
-- Gradle 8+
-
----
-
-## 📃 Documentação
-
-A documentação completa estará disponível em breve como parte da suite **Soejin**.
-
----
+A documentação completa está disponível em:
+- [JavaDoc](docs/javadoc)
+- [CHANGELOG.md](CHANGELOG.md)
 
 ## 🤝 Contribuindo
 
-Este módulo é mantido pela equipe core do Soejin Framework. Contribuições são bem-vindas via pull requests seguindo as [convenções de commits](https://www.conventionalcommits.org/pt-br/v1.0.0/).
+1. Faça o fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Faça commit das suas alterações (`git commit -m 'feat: add some AmazingFeature'`)
+4. Faça push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
----
+## 📄 Licença
 
-## 📟 Licença
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-Distribuído sob a licença MIT. Consulte o arquivo `LICENSE` para mais detalhes.
+## 📧 Contato
+
+Seu Nome - [@seu-twitter](https://twitter.com/seu-twitter) - email@exemplo.com
+
+Link do Projeto: [https://github.com/seu-usuario/security-guard](https://github.com/seu-usuario/security-guard)
 
