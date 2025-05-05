@@ -7,11 +7,7 @@ import br.com.soejin.framework.security_guard.controller.response.TokenResponse;
 import br.com.soejin.framework.security_guard.service.AuthService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,9 +47,11 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Não autorizado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<String> logout() {
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+        service.logout(token.replace("Bearer ", ""));
         return ResponseEntity.ok("Logout realizado com sucesso");
     }
+
 
     @PostMapping("/refresh-token")
     @Operation(summary = "Atualizar token JWT", description = "Endpoint para atualizar o token de autenticação JWT")
@@ -62,9 +60,11 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Token inválido ou expirado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<String> refreshToken() {
-        return ResponseEntity.ok("Token atualizado com sucesso");
+    public ResponseEntity<TokenResponse> refreshToken(@RequestHeader("Authorization") String refreshToken) {
+        TokenResponse newToken = service.refreshToken(refreshToken.replace("Bearer ", ""));
+        return ResponseEntity.ok(newToken);
     }
+
 
     @PostMapping("/register")
     @Operation(summary = "Registrar novo usuário", description = "Endpoint para criar uma nova conta de usuário no sistema")
