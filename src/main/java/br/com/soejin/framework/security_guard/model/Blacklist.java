@@ -23,7 +23,7 @@ public class Blacklist {
     @Column(nullable = false, unique = true, updatable = false)
     private String token;
 
-    @Column(nullable = false, unique = true, updatable = false)
+    @Column(nullable = false, updatable = false)
     private String description;
 
     @CreationTimestamp

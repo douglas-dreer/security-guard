@@ -1,10 +1,14 @@
 package br.com.soejin.framework.security_guard.service.impl;
 
+import br.com.soejin.framework.security_guard.controller.response.UserResponse;
+import br.com.soejin.framework.security_guard.enums.RoleTypeEnum;
 import br.com.soejin.framework.security_guard.exception.NotFoundException;
+import br.com.soejin.framework.security_guard.exception.UserNotFoundException;
 import br.com.soejin.framework.security_guard.model.User;
 import br.com.soejin.framework.security_guard.repository.UserRepository;
 import br.com.soejin.framework.security_guard.service.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +97,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateLastLogin(User user) {
         user.setLastLogin(LocalDateTime.now());
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
+
+    @Override
+    public void updateRole(Long userId, RoleTypeEnum role) {
+        User userFound = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("Usuário não encontrado com o ID " + userId)
+        );
+
+        userFound.getRoles().add(role.name());
+
+        userRepository.save(userFound);
     }
 
     /**

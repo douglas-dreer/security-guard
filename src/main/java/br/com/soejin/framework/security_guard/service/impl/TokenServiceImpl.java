@@ -43,8 +43,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void desactive(String token) {
         Token tokenToDesactivate = findByToken(token);
-        tokenToDesactivate.setRevoked(true);
-        tokenRepository.save(tokenToDesactivate);
+        tokenRepository.delete(tokenToDesactivate);
     }
 
     @Override

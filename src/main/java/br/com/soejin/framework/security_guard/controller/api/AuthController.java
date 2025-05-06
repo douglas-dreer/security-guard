@@ -11,14 +11,17 @@ import org.springframework.web.bind.annotation.*;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication", description = "API para autenticação e registro de usuários")
 public class AuthController {
     private final AuthService service;
 
@@ -35,7 +38,9 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Não autorizado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) throws BadRequestException {
+    public ResponseEntity<TokenResponse> login(
+            @Parameter(description = "Credenciais de login", required = true)
+            @RequestBody @Valid LoginRequest request) throws BadRequestException {
         TokenResponse tokenResponse = service.authenticate(request);
         return ResponseEntity.ok(tokenResponse);
     }
@@ -47,7 +52,9 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Não autorizado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<String> logout(
+            @Parameter(description = "Token JWT de autenticação (Bearer token)", required = true)
+            @RequestHeader("Authorization") String token) {
         service.logout(token.replace("Bearer ", ""));
         return ResponseEntity.ok("Logout realizado com sucesso");
     }
@@ -60,7 +67,9 @@ public class AuthController {
         @ApiResponse(responseCode = "401", description = "Token inválido ou expirado"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<TokenResponse> refreshToken(@RequestHeader("Authorization") String refreshToken) {
+    public ResponseEntity<TokenResponse> refreshToken(
+            @Parameter(description = "Token de atualização (Bearer token)", required = true)
+            @RequestHeader("Authorization") String refreshToken) {
         TokenResponse newToken = service.refreshToken(refreshToken.replace("Bearer ", ""));
         return ResponseEntity.ok(newToken);
     }
@@ -73,7 +82,9 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário já existe"),
         @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public void register(@RequestBody @Valid CreateUserRequest request) {
+    public void register(
+            @Parameter(description = "Dados do novo usuário", required = true)
+            @RequestBody @Valid CreateUserRequest request) {
         service.createUser(request);
     }
 }

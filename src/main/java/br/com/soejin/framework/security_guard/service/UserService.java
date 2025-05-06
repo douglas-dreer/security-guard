@@ -1,5 +1,7 @@
 package br.com.soejin.framework.security_guard.service;
 
+import br.com.soejin.framework.security_guard.controller.response.UserResponse;
+import br.com.soejin.framework.security_guard.enums.RoleTypeEnum;
 import br.com.soejin.framework.security_guard.model.User;
 
 /**
@@ -8,6 +10,9 @@ import br.com.soejin.framework.security_guard.model.User;
  * além de gerenciar informações de login.
  */
 public interface UserService {
+
+    /**
+    User findByUsername(String username);
     /**
      * Cria um novo usuário no sistema.
      *
@@ -40,4 +45,20 @@ public interface UserService {
      * @param user Usuário que realizou o login
      */
     void updateLastLogin(User user);
+
+    /**
+     * Retrieves detailed information about a user based on their unique ID.
+     *
+     * @param username The unique identifier of the user whose information is to be retrieved.
+     * @return A UserResponse object containing the user's ID, username, and email.
+     */
+    User findByUsername(String username);
+
+    /**
+     * Updates the role of a user identified by their unique ID.
+     *
+     * @param userId The unique identifier of the user whose role is being updated.
+     * @param role The new role to assign to the user.
+     */
+    void updateRole(Long userId, RoleTypeEnum role);
 }
