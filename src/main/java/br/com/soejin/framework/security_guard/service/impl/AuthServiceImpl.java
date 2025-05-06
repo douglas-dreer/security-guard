@@ -1,12 +1,16 @@
 package br.com.soejin.framework.security_guard.service.impl;
 
+import br.com.soejin.framework.security_guard.controller.mapper.TokenMapper;
 import br.com.soejin.framework.security_guard.controller.request.CreateUserRequest;
 import br.com.soejin.framework.security_guard.controller.request.LoginRequest;
 import br.com.soejin.framework.security_guard.controller.response.TokenResponse;
 import br.com.soejin.framework.security_guard.exception.BadCredentialsException;
+import br.com.soejin.framework.security_guard.exception.TokenInvalidException;
+import br.com.soejin.framework.security_guard.model.Token;
 import br.com.soejin.framework.security_guard.model.User;
 import br.com.soejin.framework.security_guard.service.AuthService;
 import br.com.soejin.framework.security_guard.service.BlacklistService;
+import br.com.soejin.framework.security_guard.service.TokenService;
 import br.com.soejin.framework.security_guard.service.UserService;
 import br.com.soejin.framework.security_guard.util.JwtUtil;
 import jakarta.transaction.Transactional;
@@ -19,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,9 +38,12 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserService userService;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
     private final BlacklistService blacklistService;
+    private final TokenService tokenService;
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtUtil jwtUtil;
+    private final TokenMapper tokenMapper;
 
     /**
      * Construtor da classe AuthServiceImpl.
@@ -46,42 +54,47 @@ public class AuthServiceImpl implements AuthService {
      * @param jwtUtil Utilitário para manipulação de tokens JWT
      * @param blacklistService Serviço de blacklist para tokens invalidados
      */
-    public AuthServiceImpl(UserService userService, UserDetailsServiceImpl userDetailsServiceImpl, 
-                          AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-                          BlacklistService blacklistService) {
+    public AuthServiceImpl(UserService userService, UserDetailsServiceImpl userDetailsServiceImpl,
+                           AuthenticationManager authenticationManager, JwtUtil jwtUtil,
+                           BlacklistService blacklistService, TokenService tokenService, TokenMapper tokenMapper) {
         this.userService = userService;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.blacklistService = blacklistService;
+        this.tokenService = tokenService;
+        this.tokenMapper = tokenMapper;
     }
 
     /**
      * Autentica um usuário no sistema usando username e senha.
-     * Após a autenticação bem-sucedida, atualiza o registro do último login
-     * e gera novos tokens de acesso e refresh.
+     * Após a autenticação bem-sucedida, atualiza o último login e gera novos tokens.
      *
-     * @param request Dados de login do usuário
-     * @return Resposta contendo os tokens de acesso e refresh
-     * @throws BadRequestException Se as credenciais forem inválidas
+     * @param request Dados de login do usuário.
+     * @return {@link TokenResponse} contendo os tokens de acesso e refresh.
+     * @throws BadRequestException Se as credenciais forem inválidas.
      */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public TokenResponse authenticate(LoginRequest request) throws BadRequestException {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.email(),
-                            request.password()
-                    )
+                    new UsernamePasswordAuthenticationToken(request.username(), request.password())
             );
 
             User user = (User) authentication.getPrincipal();
-            userService.updateLastLogin(user);
 
-            return createTokenResponse(user);
+            Optional<Token> tokenValido = Optional.of(tokenService.tokenByUserId(user.getId()));
+            return tokenValido
+                    .map(tokenMapper::toResponse)
+                    .orElseGet(() -> {
+                        userService.updateLastLogin(user);
+                        Token novoToken = tokenService.createToken(user);
+                        return tokenMapper.toResponse(tokenService.save(novoToken));
+                    });
+
         } catch (AuthenticationException e) {
-            throw new BadRequestException("Invalid username/password supplied");
+            throw new BadRequestException("Usuário ou senha inválidos", e);
         }
     }
 
@@ -112,7 +125,7 @@ public class AuthServiceImpl implements AuthService {
             }
 
             // Invalidar o token de refresh atual
-            blacklistService.addTokenToBlacklist(refreshToken);
+            blacklistService.addTokenToBlacklist(refreshToken, user.getId());
 
             // Gerar novos tokens
             return createTokenResponse(user);
@@ -134,20 +147,37 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(rollbackOn = Exception.class)
     public void logout(String token) {
         try {
-            // Verificar se o token é válido antes de adicionar à blacklist
-            if (token != null && !token.isEmpty() && !blacklistService.isBlacklisted(token)) {
-                blacklistService.addTokenToBlacklist(token);
-            }
-        } catch (Exception e) {
-            // Log do erro, mas não lança exceção para o cliente
-            // pois o logout deve ser sempre bem-sucedido do ponto de vista do usuário
-            logger.log(Level.WARNING, "Erro ao processar logout: " + e.getMessage(), e);
+            validateToken(token);
+
+            String username = jwtUtil.extractUsername(token);
+            User user = (User) userDetailsServiceImpl.loadUserByUsername(username);
+
+            blacklistService.addTokenToBlacklist(token, user.getId(), "User logout ");
+        } catch (TokenInvalidException e) {
+            logger.log(Level.WARNING, "Tentativa de logout com token inválido: " + e.getMessage());
+            throw new BadCredentialsException("Token inválido ou já invalidado");
+        }
+    }
+
+    /**
+     * Valida o token de acesso.
+     * Verifica se o token é nulo ou vazio e se já está na blacklist.
+     * @param token {@link String} token a ser validado
+     * @throws TokenInvalidException Se o token for inválido ou já estiver na blacklist
+     */
+    private void validateToken(String token) throws TokenInvalidException {
+        final boolean tokenNullOrEmpty = token == null || token.isEmpty();
+        final boolean tokenBlacklisted = blacklistService.isBlacklisted(token);
+        final boolean tokenExist = jwtUtil.isTokenValid(token, userDetailsServiceImpl.loadUserByUsername(jwtUtil.extractUsername(token)));
+
+        if (tokenNullOrEmpty || tokenBlacklisted || !tokenExist) {
+            throw new TokenInvalidException("Token inválido ou já invalidado");
         }
     }
 
     /**
      * Registra um novo usuário no sistema.
-     * Cria um novo usuário com os dados fornecidos e associa as permissões padrão.
+     * Cria um usuário com os dados fornecidos e associa as permissões padrão.
      *
      * @param request Dados do usuário a ser registrado
      */
@@ -172,4 +202,5 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtUtil.generateRefreshToken(user);
         return new TokenResponse(accessToken, refreshToken);
     }
+
 }

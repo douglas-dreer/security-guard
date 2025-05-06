@@ -53,9 +53,9 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(password))
                 .roles(roleDefault)
                 .enabled(true)
-                .accountNonExpired(false)
-                .accountNonLocked(false)
-                .credentialsNonExpired(false)
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
                 .build();
 
             validateUserToCreate(user);
