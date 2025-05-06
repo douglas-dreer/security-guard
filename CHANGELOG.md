@@ -3,7 +3,7 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/)
 e este projeto adere ao [Versionamento Semântico](https://semver.org/).
 
-## [1.0.0] - 2025-05-05
+## [1.0.1] - 2025-05-05
 
 ### ✨ Adicionado
 - [ead0b3e] 05-05-2025 - : remove unused import in BlacklistService interface
@@ -14,7 +14,6 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/).
 - [a96261d] 05-05-2025 - : adiciona relacionamento com usuÃ¡rio e descriÃ§Ã£o na blacklist
 - [2afd7c5] 05-05-2025 - : adiciona exceÃ§Ãµes para tratamento de tokens invÃ¡lidos e nÃ£o encontrados
 - [9efba0b] 05-05-2025 - : adiciona enumeraÃ§Ã£o para tipos de token
-- [d372386] 05-05-2025 - : adiciona validaÃ§Ã£o para o campo de username em LoginRequest
 
 ### 🔄 Alterado
 - [c881a02] 05-05-2025 - chore: version  to 1.0.1
@@ -26,5 +25,5 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/).
 - [d88aaa6] 05-05-2025 - feat: adiciona mÃ©todo para extrair data de expiraÃ§Ã£o do token e validaÃ§Ã£o da chave reta
 
 
-[Unreleased]: https://github.com/douglas-dreer/security-guard/compare/v1.0.0...main
-[v1.0.0]: https://github.com/douglas-dreer/security-guard/releases/tag/v1.0.0
+[Unreleased]: https://github.com/douglas-dreer/security-guard/compare/v1.0.1...main
+[v1.0.1]: https://github.com/douglas-dreer/security-guard/releases/tag/v1.0.1

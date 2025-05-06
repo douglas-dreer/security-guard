@@ -11,10 +11,9 @@ Este é um projeto incrível que visa [descrição do projeto].
 * : adiciona relacionamento com usuÃ¡rio e descriÃ§Ã£o na blacklist
 * : adiciona exceÃ§Ãµes para tratamento de tokens invÃ¡lidos e nÃ£o encontrados
 * : adiciona enumeraÃ§Ã£o para tipos de token
-* : adiciona validaÃ§Ã£o para o campo de username em LoginRequest
 
 ## 🏷️ Versão
-Versão atual: **1.0.0**
+Versão atual: **1.0.1**
 
 ## 📝 Histórico de Versões
 Para ver o histórico de versões, clique [aqui](CHANGELOG.md).

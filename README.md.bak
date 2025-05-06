@@ -1,8 +1,8 @@
-# 📘 My Project
-## 📋 About
-This is an amazing project that aims [project description].
+# 📘 Meu Projeto
+## 📋 Sobre
+Este é um projeto incrível que visa [descrição do projeto].
 
-## ✨ Features
+## ✨ Funcionalidades
 * : remove unused import in BlacklistService interface
 * : atualiza configuraÃ§Ã£o do Flyway e JWT, ajusta porta do servidor e configuraÃ§Ãµes do Springdoc
 * : adiciona mÃ©todo para extrair data de expiraÃ§Ã£o do token e validaÃ§Ã£o da chave secreta
@@ -12,16 +12,15 @@ This is an amazing project that aims [project description].
 * : adiciona exceÃ§Ãµes para tratamento de tokens invÃ¡lidos e nÃ£o encontrados
 * : adiciona enumeraÃ§Ã£o para tipos de token
 * : adiciona validaÃ§Ã£o para o campo de username em LoginRequest
-* : adiciona TokenMapper para conversÃ£o entre Token e TokenResponse
 
-## 🏷️ Version
-Current version: **1.0.0**
+## 🏷️ Versão
+Versão atual: **1.0.0**
 
-## 📝 Version History
-To see the version history, click [here](CHANGELOG.md).
+## 📝 Histórico de Versões
+Para ver o histórico de versões, clique [aqui](CHANGELOG.md).
 
-## 👥 Contributing
-Contributions are welcome! For more details, read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+## 👥 Contribuindo
+Contribuições são bem-vindas! Para mais detalhes, leia o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📄 Licença
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
