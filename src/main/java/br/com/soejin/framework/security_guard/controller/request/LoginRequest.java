@@ -5,14 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public record LoginRequest(
-//        @NotBlank(message = "Username is required")
-//        @NotNull(message = "Username is required")
-//        @Length(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
-//        String username,
-
-        @NotBlank(message = "Email is required")
-        @NotNull(message = "Email is required")
-        String email,
+        @NotBlank(message = "Username is required")
+        @NotNull(message = "Username is required")
+        @Length(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+        String username,
 
         @NotNull(message = "Password is required")
         @NotBlank(message = "Password is required")
