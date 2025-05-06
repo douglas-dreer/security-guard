@@ -1,0 +1,38 @@
+name: Atualiza README, CHANGELOG e Versão
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-docs-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configura Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Instala Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Instala Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Atualiza arquivos de documentação e versão
+        run: python scripts/update_docs_and_version.py
+
+      - name: Commit e push das alterações
+        run: |
+          git add README.md CHANGELOG.md gradle.properties
+          git commit -m "ci: atualiza README, CHANGELOG e versão do projeto [skip ci]" || echo "Nada para commitar"
+          git push
