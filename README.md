@@ -4,16 +4,15 @@ Este é um projeto incrível que visa [descrição do projeto].
 
 ## ✨ Funcionalidades
 * : remove unused import in BlacklistService interface
-* : atualiza configuraÃ§Ã£o do Flyway e JWT, ajusta porta do servidor e configuraÃ§Ãµes do Springdoc
-* : adiciona mÃ©todo para extrair data de expiraÃ§Ã£o do token e validaÃ§Ã£o da chave secreta
-* : aprimora autenticaÃ§Ã£o e gerenciamento de tokens com validaÃ§Ã£o e blacklist
-* : implementa modelo e repositÃ³rio para gerenciamento de tokens
-* : adiciona relacionamento com usuÃ¡rio e descriÃ§Ã£o na blacklist
-* : adiciona exceÃ§Ãµes para tratamento de tokens invÃ¡lidos e nÃ£o encontrados
-* : adiciona enumeraÃ§Ã£o para tipos de token
+* : atualiza configuração do Flyway e JWT, ajusta porta do servidor e configurações do Springdoc
+* : adiciona método para extrair data de expiração do token e validação da chave secreta
+* : aprimora autenticação e gerenciamento de tokens com validação e blacklist
+* : implementa modelo e repositório para gerenciamento de tokens
+* : adiciona relacionamento com usuário e descrição na blacklist
+* : adiciona exceções para tratamento de tokens inválidos e não encontrados
 
 ## 🏷️ Versão
-Versão atual: **1.0.1**
+Versão atual: **1.0.2**
 
 ## 📝 Histórico de Versões
 Para ver o histórico de versões, clique [aqui](CHANGELOG.md).
