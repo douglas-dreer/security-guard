@@ -26,23 +26,33 @@ spring:
           auth: true
           starttls:
             enable: true
+  # Flyway config
+  flyway:
+    default-schema: public
+    create-schemas: true
+    clean-disabled: false
 
 # JWT Configuration
 security:
   jwt:
-    secret-key: ${SECRET_KEY:UmaChaveSecretaMuitoLongaEComplexaComNoMinimo64Caracteres}
+    secret-key: ${SECRET_KEY:m+nAq8hF2FqZbQAo5sdWzQ7YtFD9Yymxeo6l8ujKkJKcV5gTgJ+yvD0TC0ajUq5xUpD9OyQb6G7pWW7zKwxdFg==}
     expiration: 86400000       # 24 horas
     refresh-token:
       expiration: 604800000    # 7 dias
 
 # Server Configuration
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /api/v1
+
+# Springdoc
 springdoc:
-  api-docs:
-    enabled: true
   swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+  api-docs:
+    path: /v3/api-docs
     enabled: true
+  packages-to-scan:  br.com.soejin.framework.security_guard.controller
 
