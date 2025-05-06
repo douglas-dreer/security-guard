@@ -1,13 +1,21 @@
 package br.com.soejin.framework.security_guard.service.impl;
 
 import br.com.soejin.framework.security_guard.enums.TokenTypeEnum;
+import br.com.soejin.framework.security_guard.exception.TokenInvalidException;
+import br.com.soejin.framework.security_guard.exception.TokenNotFoundException;
 import br.com.soejin.framework.security_guard.model.Token;
 import br.com.soejin.framework.security_guard.model.User;
 import br.com.soejin.framework.security_guard.repository.TokenRepository;
 import br.com.soejin.framework.security_guard.service.BlacklistService;
 import br.com.soejin.framework.security_guard.service.TokenService;
 import br.com.soejin.framework.security_guard.util.JwtUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -27,6 +35,25 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    public Token findByToken(String token) {
+        return tokenRepository.findByToken(token)
+                .orElseThrow(() -> new TokenNotFoundException("Token não encontrado"));
+    }
+
+    @Override
+    public void desactive(String token) {
+        Token tokenToDesactivate = findByToken(token);
+        tokenToDesactivate.setRevoked(true);
+        tokenRepository.save(tokenToDesactivate);
+    }
+
+    @Override
+    public Page<Token> findAllByStatus(int page, int pageSize, boolean status) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return tokenRepository.findTokenByRevokedIs(pageable, status);
+    }
+
+    @Override
     public Token createToken(User user) {
         final String tokenHash = jwtUtil.generateToken(user);
         Token token = new Token();
@@ -41,7 +68,8 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public Token tokenByUserId(Long userId) {
-        return tokenRepository.findTokenByUserIdAndRevokedFalse(userId);
+        return tokenRepository
+                .findTokenByUserIdAndRevokedFalse(userId);
     }
 
 
