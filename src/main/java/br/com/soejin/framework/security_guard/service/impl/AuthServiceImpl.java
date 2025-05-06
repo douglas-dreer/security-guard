@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
 
             User user = (User) authentication.getPrincipal();
 
-            Optional<Token> tokenValido = Optional.of(tokenService.tokenByUserId(user.getId()));
+            Optional<Token> tokenValido = Optional.ofNullable(tokenService.tokenByUserId(user.getId()));
             return tokenValido
                     .map(tokenMapper::toResponse)
                     .orElseGet(() -> {
