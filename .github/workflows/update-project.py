@@ -83,4 +83,5 @@ def main():
     print(f"Versão atualizada para {new_version}")
 
 if __name__ == "__main__":
-    main()
+    main()import os
+    actor = os.environ.get("GITHUB_ACTOR")

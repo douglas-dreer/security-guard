@@ -35,4 +35,7 @@ jobs:
         run: |
           git add README.md CHANGELOG.md gradle.properties
           git commit -m "ci: atualiza README, CHANGELOG e versão do projeto [skip ci]" || echo "Nada para commitar"
-          git push
+          git push- name: Atualiza arquivos de documentação e versão
+            run: python scripts/update_docs_and_version.py
+            env:
+              GITHUB_ACTOR: ${{ github.actor }}
