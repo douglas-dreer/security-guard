@@ -16,10 +16,18 @@ public class Blacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, updatable = false)
+    private User user;
+
     @Column(nullable = false, unique = true, updatable = false)
     private String token;
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String description;
+
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private java.time.LocalDateTime createdAt;
+    @Column(name = "banned_at", updatable = false)
+    private java.time.LocalDateTime bannedAt;
+
 }
