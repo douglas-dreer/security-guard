@@ -1,3 +1,4 @@
+c881a021dfd5637286c8f0ecf99bb28c2823e34b|05-05-2025|chore: version update to 1.0.1
 ead0b3e88d0776e5229b007d6a83e296ab1917e4|05-05-2025|feat: remove unused import in BlacklistService interface
 55c841c389aee170d601dfa525edfc1a9ec50c8b|05-05-2025|feat: atualiza configuraÃ§Ã£o do Flyway e JWT, ajusta porta do servidor e configuraÃ§Ãµes do Springdoc
 d88aaa6a1f376d1c84ac5cad9cf260ac30b7f1f1|05-05-2025|feat: adiciona mÃ©todo para extrair data de expiraÃ§Ã£o do token e validaÃ§Ã£o da chave secreta
@@ -7,4 +8,3 @@ a96261d9870e1b4842c683ca194980354df9a258|05-05-2025|feat: adiciona relacionament
 2afd7c511068044c72686dffb1e91fc16215fa76|05-05-2025|feat: adiciona exceÃ§Ãµes para tratamento de tokens invÃ¡lidos e nÃ£o encontrados
 9efba0bd7395e2202926d50c52df3307b53b942b|05-05-2025|feat: adiciona enumeraÃ§Ã£o para tipos de token
 d37238632d96a9c4e3d496247f84986d08793a1c|05-05-2025|feat: adiciona validaÃ§Ã£o para o campo de username em LoginRequest
-bd1aa8a4f8d2700c5b1a89c049197787f0700aa4|05-05-2025|feat: adiciona TokenMapper para conversÃ£o entre Token e TokenResponse

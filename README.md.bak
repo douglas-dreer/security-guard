@@ -1,72 +1,27 @@
-# Security Guard
+# 📘 My Project
+## 📋 About
+This is an amazing project that aims [project description].
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![Java](https://img.shields.io/badge/java-17-orange.svg)
-![Spring Boot](https://img.shields.io/badge/spring%20boot-3.2.0-green.svg)
-![License](https://img.shields.io/badge/license-MIT-yellow.svg)
+## ✨ Features
+* : remove unused import in BlacklistService interface
+* : atualiza configuraÃ§Ã£o do Flyway e JWT, ajusta porta do servidor e configuraÃ§Ãµes do Springdoc
+* : adiciona mÃ©todo para extrair data de expiraÃ§Ã£o do token e validaÃ§Ã£o da chave secreta
+* : aprimora autenticaÃ§Ã£o e gerenciamento de tokens com validaÃ§Ã£o e blacklist
+* : implementa modelo e repositÃ³rio para gerenciamento de tokens
+* : adiciona relacionamento com usuÃ¡rio e descriÃ§Ã£o na blacklist
+* : adiciona exceÃ§Ãµes para tratamento de tokens invÃ¡lidos e nÃ£o encontrados
+* : adiciona enumeraÃ§Ã£o para tipos de token
+* : adiciona validaÃ§Ã£o para o campo de username em LoginRequest
+* : adiciona TokenMapper para conversÃ£o entre Token e TokenResponse
 
-Módulo de segurança do framework Soejin, responsável por gerenciar autenticação e autorização de usuários.
+## 🏷️ Version
+Current version: **1.0.0**
 
-## 🚀 Funcionalidades
+## 📝 Version History
+To see the version history, click [here](CHANGELOG.md).
 
-- Autenticação de usuários
-- Gerenciamento de tokens JWT
-- Autorização baseada em roles
-- Documentação JavaDoc completa
-- Script de atualização de versão automatizado
+## 👥 Contributing
+Contributions are welcome! For more details, read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
-## 📋 Pré-requisitos
-
-- Java 21 ou superior
-- Maven 3.8 ou superior
-- Git
-
-## 🔧 Instalação
-
-1. Clone o repositório:
-```bash
-git clone https://github.com/seu-usuario/security-guard.git
-```
-
-2. Entre no diretório do projeto:
-```bash
-cd security-guard
-```
-
-3. Instale as dependências:
-```bash
-mvn install
-```
-
-## 🛠️ Uso
-
-Para executar o projeto:
-
-```bash
-mvn spring-boot:run
-```
-
-## 📝 Documentação
-
-A documentação completa está disponível em:
-- [JavaDoc](docs/javadoc)
-- [CHANGELOG.md](CHANGELOG.md)
-
-## 🤝 Contribuindo
-
-1. Faça o fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Faça commit das suas alterações (`git commit -m 'feat: add some AmazingFeature'`)
-4. Faça push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 📧 Contato
-
-Seu Nome - [@seu-twitter](https://twitter.com/seu-twitter) - email@exemplo.com
-
-Link do Projeto: [https://github.com/seu-usuario/security-guard](https://github.com/seu-usuario/security-guard)
-
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
