@@ -1,18 +1,19 @@
-# 📘 Meu Projeto
+# 📘 Security Guard
 ## 📋 Sobre
-Este é um projeto incrível que visa [descrição do projeto].
+Este é um projeto de segurança que visa fornecer autenticação e autorização robustas para aplicações Java Spring Boot, utilizando JWT (JSON Web Tokens) e um sistema de blacklist para tokens revogados.
 
 ## ✨ Funcionalidades
-* : remove unused import in BlacklistService interface
-* : atualiza configuração do Flyway e JWT, ajusta porta do servidor e configurações do Springdoc
-* : adiciona método para extrair data de expiração do token e validação da chave secreta
-* : aprimora autenticação e gerenciamento de tokens com validação e blacklist
-* : implementa modelo e repositório para gerenciamento de tokens
-* : adiciona relacionamento com usuário e descrição na blacklist
-* : adiciona exceções para tratamento de tokens inválidos e não encontrados
+* Autenticação de usuários com JWT
+* Gerenciamento de tokens com sistema de blacklist para tokens revogados
+* Validação de tokens e chaves secretas
+* Tratamento global de exceções
+* Documentação completa com JavaDoc
+* Testes unitários para serviços críticos
+* Controle de acesso baseado em roles (RBAC)
+* Integração com Flyway para migrações de banco de dados
 
 ## 🏷️ Versão
-Versão atual: **1.0.2**
+Versão atual: **1.0.3**
 
 ## 📝 Histórico de Versões
 Para ver o histórico de versões, clique [aqui](CHANGELOG.md).
