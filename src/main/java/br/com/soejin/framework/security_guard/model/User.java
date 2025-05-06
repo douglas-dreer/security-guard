@@ -16,7 +16,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Este objeto representa os dados do usuário
+ * Entity class representing a user in the system.
+ * This class implements UserDetails interface to integrate with Spring Security.
+ * It contains all user-related information including authentication and authorization details.
+ * 
+ * @see org.springframework.security.core.userdetails.UserDetails
+ * @see org.springframework.security.core.GrantedAuthority
  */
 @Entity
 @Table(name = "users")
@@ -77,6 +82,14 @@ public class User implements UserDetails {
         roles.add("ROLE_USER");
     }
 
+    /**
+     * Returns the authorities granted to the user.
+     * Converts the user's roles into Spring Security GrantedAuthority objects.
+     *
+     * @return A collection of GrantedAuthority objects representing the user's roles
+     * @see org.springframework.security.core.GrantedAuthority
+     * @see org.springframework.security.core.authority.SimpleGrantedAuthority
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
@@ -86,53 +99,103 @@ public class User implements UserDetails {
         return authorities;
     }
 
+    /**
+     * Returns the password used to authenticate the user.
+     *
+     * @return The user's password
+     */
     @Override
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Sets a new password for the user and updates the updatedAt timestamp.
+     *
+     * @param password The new password to set
+     */
     public void setPassword(String password) {
         this.password = password;
         this.updatedAt = LocalDateTime.now();
     }
 
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return The user's username
+     */
     @Override
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Indicates whether the user's account has expired.
+     *
+     * @return true if the user's account is valid (not expired), false otherwise
+     */
     @Override
     public boolean isAccountNonExpired() {
         return accountNonExpired;
     }
 
+    /**
+     * Indicates whether the user is locked or unlocked.
+     *
+     * @return true if the user is not locked, false otherwise
+     */
     @Override
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
 
+    /**
+     * Indicates whether the user's credentials (password) has expired.
+     *
+     * @return true if the user's credentials are valid (not expired), false otherwise
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
     }
 
+    /**
+     * Indicates whether the user is enabled or disabled.
+     *
+     * @return true if the user is enabled, false otherwise
+     */
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * Generates a password reset token for the user with an expiry time.
+     * Updates the updatedAt timestamp.
+     *
+     * @param token The password reset token to set
+     * @param expiryTime The expiry time for the password reset token
+     */
     public void generatePasswordResetToken(String token, LocalDateTime expiryTime) {
         this.passwordResetToken = token;
         this.passwordResetExpires = expiryTime;
         this.updatedAt = LocalDateTime.now();
     }
 
+    /**
+     * Clears the password reset token and its expiry time.
+     * Updates the updatedAt timestamp.
+     */
     public void clearPasswordResetToken() {
         this.passwordResetToken = null;
         this.passwordResetExpires = null;
         this.updatedAt = LocalDateTime.now();
     }
 
+    /**
+     * Updates the last login timestamp to the current time.
+     * Also updates the updatedAt timestamp.
+     */
     public void updateLastLogin() {
         this.lastLogin = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();

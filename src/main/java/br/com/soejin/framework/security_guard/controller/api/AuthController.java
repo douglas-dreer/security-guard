@@ -19,16 +19,37 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+/**
+ * REST controller for handling authentication-related operations.
+ * Provides endpoints for user login, logout, token refresh, and registration.
+ * 
+ * @see br.com.soejin.framework.security_guard.service.AuthService
+ */
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Authentication", description = "API para autenticação e registro de usuários")
 public class AuthController {
     private final AuthService service;
 
+    /**
+     * Constructs an AuthController with the specified AuthService.
+     * 
+     * @param authService The service that handles authentication operations
+     */
     public AuthController(AuthService authService) {
         this.service = authService;
     }
 
+    /**
+     * Authenticates a user and returns a JWT token.
+     * 
+     * @param request The login request containing username and password
+     * @return ResponseEntity containing the JWT token
+     * @throws BadRequestException If the credentials are invalid
+     * @see br.com.soejin.framework.security_guard.controller.request.LoginRequest
+     * @see br.com.soejin.framework.security_guard.controller.response.TokenResponse
+     * @see br.com.soejin.framework.security_guard.service.AuthService#authenticate(LoginRequest)
+     */
     @PostMapping("/login")
     @Operation(summary = "Autenticar usuário", description = "Endpoint para realizar o login do usuário no sistema")
     @ApiResponses(value = {
@@ -45,6 +66,13 @@ public class AuthController {
         return ResponseEntity.ok(tokenResponse);
     }
 
+    /**
+     * Logs out a user by invalidating their JWT token.
+     * 
+     * @param token The JWT token to invalidate (from Authorization header)
+     * @return ResponseEntity with a success message
+     * @see br.com.soejin.framework.security_guard.service.AuthService#logout(String)
+     */
     @PostMapping("/logout")
     @Operation(summary = "Desconectar usuário", description = "Endpoint para realizar o logout do usuário do sistema")
     @ApiResponses(value = {
@@ -59,7 +87,14 @@ public class AuthController {
         return ResponseEntity.ok("Logout realizado com sucesso");
     }
 
-
+    /**
+     * Refreshes a JWT token using a refresh token.
+     * 
+     * @param refreshToken The refresh token (from Authorization header)
+     * @return ResponseEntity containing the new JWT token
+     * @see br.com.soejin.framework.security_guard.controller.response.TokenResponse
+     * @see br.com.soejin.framework.security_guard.service.AuthService#refreshToken(String)
+     */
     @PostMapping("/refresh-token")
     @Operation(summary = "Atualizar token JWT", description = "Endpoint para atualizar o token de autenticação JWT")
     @ApiResponses(value = {
@@ -74,7 +109,13 @@ public class AuthController {
         return ResponseEntity.ok(newToken);
     }
 
-
+    /**
+     * Registers a new user in the system.
+     * 
+     * @param request The request containing user details for registration
+     * @see br.com.soejin.framework.security_guard.controller.request.CreateUserRequest
+     * @see br.com.soejin.framework.security_guard.service.AuthService#createUser(CreateUserRequest)
+     */
     @PostMapping("/register")
     @Operation(summary = "Registrar novo usuário", description = "Endpoint para criar uma nova conta de usuário no sistema")
     @ApiResponses(value = {

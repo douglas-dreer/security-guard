@@ -5,60 +5,70 @@ import br.com.soejin.framework.security_guard.enums.RoleTypeEnum;
 import br.com.soejin.framework.security_guard.model.User;
 
 /**
- * Interface que define os serviços relacionados à gestão de usuários.
- * Esta interface fornece métodos para criar, atualizar e excluir usuários,
- * além de gerenciar informações de login.
+ * Interface that defines user management services.
+ * This interface provides methods for creating, updating, and deleting users,
+ * as well as managing login information.
+ * 
+ * @see br.com.soejin.framework.security_guard.model.User
+ * @see br.com.soejin.framework.security_guard.service.impl.UserServiceImpl
  */
 public interface UserService {
 
     /**
-    User findByUsername(String username);
-    /**
-     * Cria um novo usuário no sistema.
+     * Creates a new user in the system.
      *
-     * @param username Nome de usuário único
-     * @param email Email do usuário
-     * @param password Senha do usuário
-     * @return O usuário criado
+     * @param username Unique username for the user
+     * @param email User's email address
+     * @param password User's password
+     * @return The created user
+     * @throws br.com.soejin.framework.security_guard.exception.NotFoundException If username or email already exists
+     * @see br.com.soejin.framework.security_guard.model.User
      */
     User createUser(String username, String email, String password);
 
     /**
-     * Atualiza a senha de um usuário existente.
+     * Updates the password of an existing user.
      *
-     * @param username Nome de usuário do usuário a ter a senha atualizada
-     * @param password Nova senha do usuário
-     * @return O usuário com a senha atualizada
+     * @param username Username of the user whose password is to be updated
+     * @param password New password for the user
+     * @return The user with the updated password
+     * @throws br.com.soejin.framework.security_guard.exception.UserNotFoundException If the user is not found
      */
     User updatePassword(String username, String password);
 
     /**
-     * Remove um usuário do sistema.
+     * Removes a user from the system.
      *
-     * @param username Nome de usuário do usuário a ser removido
+     * @param username Username of the user to be removed
+     * @throws br.com.soejin.framework.security_guard.exception.UserNotFoundException If the user is not found
      */
     void deleteUser(String username);
 
     /**
-     * Atualiza o registro do último login do usuário.
+     * Updates the last login record of the user.
      *
-     * @param user Usuário que realizou o login
+     * @param user User who has logged in
+     * @see br.com.soejin.framework.security_guard.model.User#updateLastLogin()
      */
     void updateLastLogin(User user);
 
     /**
-     * Retrieves detailed information about a user based on their unique ID.
+     * Finds a user by their username.
      *
-     * @param username The unique identifier of the user whose information is to be retrieved.
-     * @return A UserResponse object containing the user's ID, username, and email.
+     * @param username The username of the user to find
+     * @return The user with the specified username
+     * @throws org.springframework.security.core.userdetails.UsernameNotFoundException If the user is not found
+     * @see br.com.soejin.framework.security_guard.model.User
      */
     User findByUsername(String username);
 
     /**
      * Updates the role of a user identified by their unique ID.
      *
-     * @param userId The unique identifier of the user whose role is being updated.
-     * @param role The new role to assign to the user.
+     * @param userId The unique identifier of the user whose role is being updated
+     * @param role The new role to assign to the user
+     * @throws br.com.soejin.framework.security_guard.exception.UserNotFoundException If the user is not found
+     * @see br.com.soejin.framework.security_guard.enums.RoleTypeEnum
      */
     void updateRole(Long userId, RoleTypeEnum role);
 }
