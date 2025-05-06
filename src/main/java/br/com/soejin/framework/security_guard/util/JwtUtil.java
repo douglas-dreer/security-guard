@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,6 +131,38 @@ public class JwtUtil {
         } catch (Exception e) {
             logger.severe("Erro ao gerar chave de assinatura: " + e.getMessage());
             throw new JwtException("Erro ao gerar chave de assinatura", e);
+        }
+    }
+
+    private String createSecretKey() {
+        try {
+            byte[] keyBytes = secretKey.getBytes();
+            if (keyBytes.length < 64) {
+                throw new IllegalArgumentException("A chave secreta deve ter pelo menos 64 bytes");
+            }
+            return Keys.hmacShaKeyFor(keyBytes).toString();
+        } catch (Exception e) {
+            logger.severe("Erro ao gerar chave de assinatura: " + e.getMessage());
+            throw new JwtException("Erro ao gerar chave de assinatura", e);
+        }
+    }
+
+
+    /**
+     * Extrai a data de expiração do token.
+     * @param tokenHash O token do qual a data de expiração será extraída.
+     * @return LocalDateTime A data de expiração do token ou null se ocorrer erro.
+     */
+    public LocalDateTime getExpirationDate(String tokenHash) {
+        try {
+            Claims claims = extractAllClaims(tokenHash);
+            return LocalDateTime.ofInstant(
+                claims.getExpiration().toInstant(),
+                ZoneId.systemDefault()
+            );
+        } catch (JwtException e) {
+            logger.warning("Erro ao extrair data de expiração do token: " + e.getMessage());
+            return null;
         }
     }
 }
