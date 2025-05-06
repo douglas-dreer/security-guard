@@ -94,7 +94,7 @@ public class JwtUtil {
         }
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         try {
             return extractExpiration(token).before(Date.from(Instant.now()));
         } catch (JwtException e) {

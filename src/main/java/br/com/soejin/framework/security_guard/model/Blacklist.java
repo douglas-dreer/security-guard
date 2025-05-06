@@ -16,8 +16,8 @@ public class Blacklist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, updatable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
     @Column(nullable = false, unique = true, updatable = false)
