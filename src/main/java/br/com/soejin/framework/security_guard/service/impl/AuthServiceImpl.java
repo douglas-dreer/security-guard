@@ -93,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
                         return tokenMapper.toResponse(tokenService.save(novoToken));
                     });
 
-        } catch (AuthenticationException e) {
+        } catch (AuthenticationException | TokenInvalidException e) {
             throw new BadRequestException("Usuário ou senha inválidos", e);
         }
     }
@@ -152,6 +152,7 @@ public class AuthServiceImpl implements AuthService {
             String username = jwtUtil.extractUsername(token);
             User user = (User) userDetailsServiceImpl.loadUserByUsername(username);
 
+            tokenService.desactive(token);
             blacklistService.addTokenToBlacklist(token, user.getId(), "User logout ");
         } catch (TokenInvalidException e) {
             logger.log(Level.WARNING, "Tentativa de logout com token inválido: " + e.getMessage());
