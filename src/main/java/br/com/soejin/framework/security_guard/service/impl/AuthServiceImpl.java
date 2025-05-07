@@ -53,6 +53,8 @@ public class AuthServiceImpl implements AuthService {
      * @param authenticationManager Gerenciador de autenticação
      * @param jwtUtil Utilitário para manipulação de tokens JWT
      * @param blacklistService Serviço de blacklist para tokens invalidados
+     * @param tokenService Serviço de tokens
+     * @param tokenMapper Mapeador de tokens para respostas
      */
     public AuthServiceImpl(UserService userService, UserDetailsServiceImpl userDetailsServiceImpl,
                            AuthenticationManager authenticationManager, JwtUtil jwtUtil,
@@ -109,26 +111,20 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(rollbackOn = Exception.class)
     public TokenResponse refreshToken(String refreshToken) {
         try {
-            // Verificar se o token está na blacklist
-            if (blacklistService.isBlacklisted(refreshToken)) {
-                throw new BadCredentialsException("Token de refresh invalidado");
-            }
-
+            // Validar o token de refresh através do TokenService
+            tokenService.validateRefreshToken(refreshToken);
+            
             String username = jwtUtil.extractUsername(refreshToken);
-            if (username == null) {
-                throw new BadCredentialsException("Token de refresh inválido ou expirado");
-            }
-
             User user = (User) userDetailsServiceImpl.loadUserByUsername(username);
-            if (!jwtUtil.isTokenValid(refreshToken, user)) {
-                throw new BadCredentialsException("Token de refresh inválido ou expirado");
-            }
-
+            
             // Invalidar o token de refresh atual
             blacklistService.addTokenToBlacklist(refreshToken, user.getId());
 
             // Gerar novos tokens
             return createTokenResponse(user);
+        } catch (TokenInvalidException e) {
+            logger.log(Level.WARNING, "Token de refresh inválido: " + e.getMessage());
+            throw new BadCredentialsException("Token de refresh inválido ou expirado: " + e.getMessage());
         } catch (Exception e) {
             if (e instanceof BadCredentialsException) {
                 throw e;
@@ -147,7 +143,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(rollbackOn = Exception.class)
     public void logout(String token) {
         try {
-            validateToken(token);
+            tokenService.validateAccessToken(token);
 
             String username = jwtUtil.extractUsername(token);
             User user = (User) userDetailsServiceImpl.loadUserByUsername(username);
@@ -157,22 +153,6 @@ public class AuthServiceImpl implements AuthService {
         } catch (TokenInvalidException e) {
             logger.log(Level.WARNING, "Tentativa de logout com token inválido: " + e.getMessage());
             throw new BadCredentialsException("Token inválido ou já invalidado");
-        }
-    }
-
-    /**
-     * Valida o token de acesso.
-     * Verifica se o token é nulo ou vazio e se já está na blacklist.
-     * @param token {@link String} token a ser validado
-     * @throws TokenInvalidException Se o token for inválido ou já estiver na blacklist
-     */
-    private void validateToken(String token) throws TokenInvalidException {
-        final boolean tokenNullOrEmpty = token == null || token.isEmpty();
-        final boolean tokenBlacklisted = blacklistService.isBlacklisted(token);
-        final boolean tokenExist = jwtUtil.isTokenValid(token, userDetailsServiceImpl.loadUserByUsername(jwtUtil.extractUsername(token)));
-
-        if (tokenNullOrEmpty || tokenBlacklisted || !tokenExist) {
-            throw new TokenInvalidException("Token inválido ou já invalidado");
         }
     }
 

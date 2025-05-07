@@ -12,20 +12,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- * Entity class representing a user in the system.
- * This class implements UserDetails interface to integrate with Spring Security.
- * It contains all user-related information including authentication and authorization details.
+ * Classe de entidade que representa um usuário no sistema.
+ * Esta classe implementa a interface UserDetails para integração com o Spring Security.
+ * Contém todas as informações relacionadas ao usuário, incluindo detalhes de autenticação e autorização.
+ * 
+ * Princípios aplicados:
+ * - SRP: Separação de responsabilidades relacionadas à autenticação vs. gerenciamento de usuário
+ * - Encapsulamento: Proteção do estado interno usando métodos específicos
+ * - Imutabilidade: Retorno de coleções imutáveis para evitar modificação externa
  * 
  * @see org.springframework.security.core.userdetails.UserDetails
  * @see org.springframework.security.core.GrantedAuthority
  */
 @Entity
 @Table(name = "users")
-
 @AllArgsConstructor
 @Data
 @Builder
@@ -79,30 +85,28 @@ public class User implements UserDetails {
     private Set<String> roles = new HashSet<>();
 
     public User() {
-        roles.add("ROLE_USER");
+        this.roles = new HashSet<>();
+        addRole("ROLE_USER");
     }
 
     /**
-     * Returns the authorities granted to the user.
-     * Converts the user's roles into Spring Security GrantedAuthority objects.
+     * Retorna as autoridades concedidas ao usuário.
+     * Converte as roles do usuário em objetos GrantedAuthority do Spring Security.
+     * Utiliza programação funcional para maior legibilidade e manutenção.
      *
-     * @return A collection of GrantedAuthority objects representing the user's roles
-     * @see org.springframework.security.core.GrantedAuthority
-     * @see org.springframework.security.core.authority.SimpleGrantedAuthority
+     * @return Uma coleção de objetos GrantedAuthority representando as roles do usuário
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role));
-        }
-        return authorities;
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**
-     * Returns the password used to authenticate the user.
+     * Retorna a senha usada para autenticar o usuário.
      *
-     * @return The user's password
+     * @return A senha do usuário
      */
     @Override
     public String getPassword() {
@@ -110,19 +114,19 @@ public class User implements UserDetails {
     }
 
     /**
-     * Sets a new password for the user and updates the updatedAt timestamp.
+     * Define uma nova senha para o usuário e atualiza o timestamp de modificação.
      *
-     * @param password The new password to set
+     * @param password A nova senha a ser definida
      */
     public void setPassword(String password) {
         this.password = password;
-        this.updatedAt = LocalDateTime.now();
+        updateTimestamp();
     }
 
     /**
-     * Returns the username used to authenticate the user.
+     * Retorna o nome de usuário usado para autenticar o usuário.
      *
-     * @return The user's username
+     * @return O nome de usuário
      */
     @Override
     public String getUsername() {
@@ -130,9 +134,9 @@ public class User implements UserDetails {
     }
 
     /**
-     * Indicates whether the user's account has expired.
+     * Indica se a conta do usuário expirou.
      *
-     * @return true if the user's account is valid (not expired), false otherwise
+     * @return true se a conta do usuário for válida (não expirada), false caso contrário
      */
     @Override
     public boolean isAccountNonExpired() {
@@ -140,9 +144,9 @@ public class User implements UserDetails {
     }
 
     /**
-     * Indicates whether the user is locked or unlocked.
+     * Indica se o usuário está bloqueado ou desbloqueado.
      *
-     * @return true if the user is not locked, false otherwise
+     * @return true se o usuário não estiver bloqueado, false caso contrário
      */
     @Override
     public boolean isAccountNonLocked() {
@@ -150,9 +154,9 @@ public class User implements UserDetails {
     }
 
     /**
-     * Indicates whether the user's credentials (password) has expired.
+     * Indica se as credenciais do usuário (senha) expiraram.
      *
-     * @return true if the user's credentials are valid (not expired), false otherwise
+     * @return true se as credenciais do usuário forem válidas (não expiradas), false caso contrário
      */
     @Override
     public boolean isCredentialsNonExpired() {
@@ -160,9 +164,9 @@ public class User implements UserDetails {
     }
 
     /**
-     * Indicates whether the user is enabled or disabled.
+     * Indica se o usuário está habilitado ou desabilitado.
      *
-     * @return true if the user is enabled, false otherwise
+     * @return true se o usuário estiver habilitado, false caso contrário
      */
     @Override
     public boolean isEnabled() {
@@ -170,34 +174,93 @@ public class User implements UserDetails {
     }
 
     /**
-     * Generates a password reset token for the user with an expiry time.
-     * Updates the updatedAt timestamp.
+     * Adiciona uma role ao conjunto de roles do usuário.
+     * 
+     * @param role A role a ser adicionada
+     * @return true se a role foi adicionada, false se já existia
+     */
+    public boolean addRole(String role) {
+        boolean added = roles.add(role);
+        if (added) {
+            updateTimestamp();
+        }
+        return added;
+    }
+    
+    /**
+     * Remove uma role do conjunto de roles do usuário.
+     * 
+     * @param role A role a ser removida
+     * @return true se a role foi removida, false se não existia
+     */
+    public boolean removeRole(String role) {
+        boolean removed = roles.remove(role);
+        if (removed) {
+            updateTimestamp();
+        }
+        return removed;
+    }
+    
+    /**
+     * Retorna uma cópia imutável do conjunto de roles.
+     * Isso previne modificação externa direta da coleção de roles.
+     * 
+     * @return Um conjunto imutável de roles
+     */
+    public Set<String> getRoles() {
+        return Collections.unmodifiableSet(roles);
+    }
+
+    /**
+     * Gera um token de redefinição de senha para o usuário com um tempo de expiração.
+     * Atualiza o timestamp de modificação.
      *
-     * @param token The password reset token to set
-     * @param expiryTime The expiry time for the password reset token
+     * @param token O token de redefinição de senha a ser definido
+     * @param expiryTime O tempo de expiração para o token de redefinição de senha
      */
     public void generatePasswordResetToken(String token, LocalDateTime expiryTime) {
         this.passwordResetToken = token;
         this.passwordResetExpires = expiryTime;
-        this.updatedAt = LocalDateTime.now();
+        updateTimestamp();
     }
 
     /**
-     * Clears the password reset token and its expiry time.
-     * Updates the updatedAt timestamp.
+     * Limpa o token de redefinição de senha e seu tempo de expiração.
+     * Atualiza o timestamp de modificação.
      */
     public void clearPasswordResetToken() {
         this.passwordResetToken = null;
         this.passwordResetExpires = null;
-        this.updatedAt = LocalDateTime.now();
+        updateTimestamp();
     }
 
     /**
-     * Updates the last login timestamp to the current time.
-     * Also updates the updatedAt timestamp.
+     * Atualiza o timestamp do último login para o momento atual.
+     * Também atualiza o timestamp de modificação.
      */
     public void updateLastLogin() {
         this.lastLogin = LocalDateTime.now();
+        updateTimestamp();
+    }
+    
+    /**
+     * Método utilitário para atualizar o timestamp de modificação.
+     * Centraliza a lógica de atualização do timestamp para evitar duplicação.
+     */
+    private void updateTimestamp() {
         this.updatedAt = LocalDateTime.now();
+    }
+    
+    /**
+     * Verifica se um token de redefinição de senha é válido.
+     * 
+     * @param token O token a ser verificado
+     * @return true se o token é válido e não expirou, false caso contrário
+     */
+    public boolean isPasswordResetTokenValid(String token) {
+        return token != null && 
+               token.equals(this.passwordResetToken) && 
+               this.passwordResetExpires != null && 
+               LocalDateTime.now().isBefore(this.passwordResetExpires);
     }
 }

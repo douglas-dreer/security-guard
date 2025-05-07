@@ -7,20 +7,27 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * Interface de serviço para gerenciamento de tokens.
+ * Define operações para criação, validação, busca e gerenciamento de tokens de autenticação.
+ */
 public interface TokenService {
     /**
-     * Finds a token entity based on the provided token string.
-     * This method is commonly used to retrieve details about a token,
-     * such as its associated user, type, and expiration status.
+     * Busca uma entidade token com base no valor do token fornecido.
+     * Este método é comumente usado para recuperar detalhes sobre um token,
+     * como seu usuário associado, tipo e status de expiração.
      *
-     * @param token The unique string representing the token to be searched.
-     * @return The Token entity associated with the provided string, or null if no such token exists.
+     * @param token A string única que representa o token a ser pesquisado.
+     * @return A entidade Token associada à string fornecida, ou null se nenhum token existir.
      */
     Token findByToken(String token);
 
     /**
-     * Busca um token pelo usuario fornecido que não esteja revogado.
+     * Busca um token pelo usuário fornecido que não esteja revogado.
+     * 
      * @param userId {@link Long} ID do usuário.
+     * @return O token válido para o usuário especificado.
+     * @throws TokenInvalidException Se nenhum token válido for encontrado.
      */
     Token tokenByUserId(Long userId) throws TokenInvalidException;
 
@@ -48,12 +55,30 @@ public interface TokenService {
     void desactive(String token);
 
     /**
-     * Retrieves a paginated list of tokens based on their status.
+     * Recupera uma lista paginada de tokens com base em seu status.
      *
-     * @param page The page number to retrieve, starting from 0.
-     * @param pageSize The number of tokens to include in each page.
-     * @param status The status of the tokens to filter by (e.g., active or revoked).
-     * @return A page of tokens that match the specified status within the given page and size parameters.
+     * @param page O número da página a recuperar, começando de 0.
+     * @param pageSize O número de tokens a incluir em cada página.
+     * @param status O status dos tokens para filtrar (ex: ativo ou revogado).
+     * @return Uma página de tokens que correspondem ao status especificado.
      */
     Page<Token> findAllByStatus(int page, int pageSize, boolean status);
+    
+    /**
+     * Valida um token de acesso.
+     * Verifica se o token é nulo ou vazio, se já está na blacklist e se é válido.
+     * 
+     * @param token Token de acesso a ser validado
+     * @throws TokenInvalidException Se o token for inválido ou já estiver na blacklist
+     */
+    void validateAccessToken(String token) throws TokenInvalidException;
+    
+    /**
+     * Valida um token de refresh.
+     * Verifica se o token é nulo ou vazio, se já está na blacklist e se é válido.
+     * 
+     * @param refreshToken Token de refresh a ser validado
+     * @throws TokenInvalidException Se o token for inválido ou já estiver na blacklist
+     */
+    void validateRefreshToken(String refreshToken) throws TokenInvalidException;
 }

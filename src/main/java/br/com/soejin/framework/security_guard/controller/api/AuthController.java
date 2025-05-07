@@ -1,27 +1,28 @@
 package br.com.soejin.framework.security_guard.controller.api;
 
-
 import br.com.soejin.framework.security_guard.controller.request.CreateUserRequest;
 import br.com.soejin.framework.security_guard.controller.request.LoginRequest;
+import br.com.soejin.framework.security_guard.controller.response.MessageResponse;
 import br.com.soejin.framework.security_guard.controller.response.TokenResponse;
 import br.com.soejin.framework.security_guard.service.AuthService;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import java.time.LocalDateTime;
+
 /**
- * REST controller for handling authentication-related operations.
- * Provides endpoints for user login, logout, token refresh, and registration.
+ * Controlador REST para gerenciar operações de autenticação.
+ * Fornece endpoints para login, logout, atualização de token e registro de usuários.
  * 
  * @see br.com.soejin.framework.security_guard.service.AuthService
  */
@@ -29,103 +30,108 @@ import jakarta.validation.Valid;
 @RequestMapping("/auth")
 @Tag(name = "Authentication", description = "API para autenticação e registro de usuários")
 public class AuthController {
-    private final AuthService service;
+    private final AuthService authService;
 
     /**
-     * Constructs an AuthController with the specified AuthService.
+     * Construtor com injeção de dependência via construtor.
      * 
-     * @param authService The service that handles authentication operations
+     * @param authService O serviço de autenticação
      */
     public AuthController(AuthService authService) {
-        this.service = authService;
+        this.authService = authService;
     }
 
     /**
-     * Authenticates a user and returns a JWT token.
+     * Autentica um usuário e retorna um token JWT.
      * 
-     * @param request The login request containing username and password
-     * @return ResponseEntity containing the JWT token
-     * @throws BadRequestException If the credentials are invalid
-     * @see br.com.soejin.framework.security_guard.controller.request.LoginRequest
-     * @see br.com.soejin.framework.security_guard.controller.response.TokenResponse
-     * @see br.com.soejin.framework.security_guard.service.AuthService#authenticate(LoginRequest)
+     * @param request O pedido de login contendo username e senha
+     * @return ResponseEntity contendo o token JWT
+     * @throws BadRequestException Se as credenciais forem inválidas
      */
     @PostMapping("/login")
     @Operation(summary = "Autenticar usuário", description = "Endpoint para realizar o login do usuário no sistema")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Login realizado com sucesso",
-            content = @Content(schema = @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "400", description = "Credenciais inválidas"),
-        @ApiResponse(responseCode = "401", description = "Não autorizado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Login realizado com sucesso",
+            content = @Content(schema = @Schema(implementation = TokenResponse.class))),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Credenciais inválidas"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Não autorizado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<TokenResponse> login(
             @Parameter(description = "Credenciais de login", required = true)
             @RequestBody @Valid LoginRequest request) throws BadRequestException {
-        TokenResponse tokenResponse = service.authenticate(request);
+        TokenResponse tokenResponse = authService.authenticate(request);
         return ResponseEntity.ok(tokenResponse);
     }
 
     /**
-     * Logs out a user by invalidating their JWT token.
+     * Desconecta um usuário invalidando seu token JWT.
      * 
-     * @param token The JWT token to invalidate (from Authorization header)
-     * @return ResponseEntity with a success message
-     * @see br.com.soejin.framework.security_guard.service.AuthService#logout(String)
+     * @param token O token JWT a ser invalidado (do cabeçalho Authorization)
+     * @return ResponseEntity com uma mensagem de sucesso
      */
     @PostMapping("/logout")
     @Operation(summary = "Desconectar usuário", description = "Endpoint para realizar o logout do usuário do sistema")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Logout realizado com sucesso"),
-        @ApiResponse(responseCode = "401", description = "Não autorizado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Logout realizado com sucesso"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Não autorizado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public ResponseEntity<String> logout(
+    public ResponseEntity<MessageResponse> logout(
             @Parameter(description = "Token JWT de autenticação (Bearer token)", required = true)
             @RequestHeader("Authorization") String token) {
-        service.logout(token.replace("Bearer ", ""));
-        return ResponseEntity.ok("Logout realizado com sucesso");
+        authService.logout(token.replace("Bearer ", ""));
+        return ResponseEntity.ok(new MessageResponse(
+            "Sucesso",
+            "Logout realizado com sucesso",
+            HttpStatus.OK.value(),
+            LocalDateTime.now()
+        ));
     }
 
     /**
-     * Refreshes a JWT token using a refresh token.
+     * Atualiza um token JWT usando um token de atualização.
      * 
-     * @param refreshToken The refresh token (from Authorization header)
-     * @return ResponseEntity containing the new JWT token
-     * @see br.com.soejin.framework.security_guard.controller.response.TokenResponse
-     * @see br.com.soejin.framework.security_guard.service.AuthService#refreshToken(String)
+     * @param refreshToken O token de atualização (do cabeçalho Authorization)
+     * @return ResponseEntity contendo o novo token JWT
      */
     @PostMapping("/refresh-token")
     @Operation(summary = "Atualizar token JWT", description = "Endpoint para atualizar o token de autenticação JWT")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Token atualizado com sucesso"),
-        @ApiResponse(responseCode = "401", description = "Token inválido ou expirado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Token atualizado com sucesso"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Token inválido ou expirado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<TokenResponse> refreshToken(
             @Parameter(description = "Token de atualização (Bearer token)", required = true)
             @RequestHeader("Authorization") String refreshToken) {
-        TokenResponse newToken = service.refreshToken(refreshToken.replace("Bearer ", ""));
+        TokenResponse newToken = authService.refreshToken(refreshToken.replace("Bearer ", ""));
         return ResponseEntity.ok(newToken);
     }
 
     /**
-     * Registers a new user in the system.
+     * Registra um novo usuário no sistema.
      * 
-     * @param request The request containing user details for registration
-     * @see br.com.soejin.framework.security_guard.controller.request.CreateUserRequest
-     * @see br.com.soejin.framework.security_guard.service.AuthService#createUser(CreateUserRequest)
+     * @param request Os dados do usuário para registro
+     * @return ResponseEntity com o status da operação
      */
     @PostMapping("/register")
     @Operation(summary = "Registrar novo usuário", description = "Endpoint para criar uma nova conta de usuário no sistema")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário já existe"),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Dados inválidos ou usuário já existe"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public void register(
+    public ResponseEntity<MessageResponse> register(
             @Parameter(description = "Dados do novo usuário", required = true)
             @RequestBody @Valid CreateUserRequest request) {
-        service.createUser(request);
+        authService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(new MessageResponse(
+                "Sucesso",
+                "Usuário registrado com sucesso",
+                HttpStatus.CREATED.value(),
+                LocalDateTime.now()
+            ));
     }
 }
