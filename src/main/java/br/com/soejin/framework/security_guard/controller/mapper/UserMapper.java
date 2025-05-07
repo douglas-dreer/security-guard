@@ -40,6 +40,6 @@ public interface UserMapper {
     @Mapping(target = "pageSize", source = "userPageabled.size")
     @Mapping(target = "totalPages", source = "userPageabled.totalPages")
     @Mapping(target = "totalElements", source = "userPageabled.totalElements")
-    PageResponse<User> toPageResponse(Page<User> userPageabled)
+    PageResponse<User> toPageResponse(Page<User> userPageabled);
 
 }
