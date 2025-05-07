@@ -16,9 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * Implementação do serviço de tokens.
  * Esta classe fornece a implementação concreta dos métodos definidos na interface TokenService,

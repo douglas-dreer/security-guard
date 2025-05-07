@@ -5,7 +5,6 @@ import br.com.soejin.framework.security_guard.model.Token;
 import br.com.soejin.framework.security_guard.model.User;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
 
 /**
  * Interface de serviço para gerenciamento de tokens.
