@@ -11,9 +11,12 @@ Este é um projeto de segurança que visa fornecer autenticação e autorizaçã
 * Testes unitários para serviços críticos
 * Controle de acesso baseado em roles (RBAC)
 * Integração com Flyway para migrações de banco de dados
+* Suporte à paginação e filtragem de tokens por status
+* Factory patterns para criação de objetos de teste
+* Tratamento avançado de exceções com TokenInvalidException
 
 ## 🏷️ Versão
-Versão atual: **1.0.3**
+Versão atual: **1.0.4**
 
 ## 📝 Histórico de Versões
 Para ver o histórico de versões, clique [aqui](CHANGELOG.md).

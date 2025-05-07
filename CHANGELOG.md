@@ -3,44 +3,60 @@ Todas as alterações notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/)
 e este projeto adere ao [Versionamento Semântico](https://semver.org/).
 
-## [1.0.3] - 2025-05-05
+## [v1.0.4] - 2025-05-07
 
 ### ✨ Adicionado
-- Documentação JavaDoc completa para todas as classes do projeto
-- Testes unitários para o serviço de autenticação com blacklist
-- Tratamento global de exceções
-- Validação para o campo de username em LoginRequest
-- TokenMapper para conversão entre Token e TokenResponse
+- [e0acf1f] 2025-05-07 - feat: adicionar testes para UserServiceImpl
+- [ec125d8] 2025-05-07 - feat: adicionar UserFactory para criação de instâncias de User e CreateUserRequest
+- [576b528] 2025-05-07 - feat: aprimorar o gerenciamento de autenticação com melhorias na documentação e na estrutura de resposta
 
 ### 🔄 Alterado
-- Atualização de versão para 1.0.3
-- Melhorias na documentação e configurações
+- [fecc362] 2025-05-07 - refactor: atualizar a lógica de gerenciamento de roles e melhorar o tratamento de exceções
+- [c8e01e4] 2025-05-07 - refactor: remover dependência do JwtUtil na BlacklistServiceImpl
+- [8099568] 2025-05-07 - refactor: simplificar a classe UserResponse e remover importação desnecessária
+- [3e86d44] 2025-05-07 - refactor: remover importações desnecessárias de List
+- [c2189a5] 2025-05-07 - refactor: remover comentários de princípios de design da classe User
 
-### 🔒 Segurança
-- Integração da blacklist com serviço de autenticação
-- Atualização de permissões de acesso para endpoints de autenticação
-
-## [1.0.2] - 2025-05-05
+## [v1.0.3] - 2025-05-06
 
 ### ✨ Adicionado
-- [ead0b3e] 05-05-2025 - : remove unused import in BlacklistService interface
-- [55c841c] 05-05-2025 - : atualiza configurações do Flyway e JWT, ajusta porta do servidor e configurações do Springdoc
-- [d88aaa6] 05-05-2025 - : adiciona método para extrair data de expiração do token e validação da chave secreta
-- [306cac8] 05-05-2025 - : aprimora autenticação e gerenciamento de tokens com validação e blacklist
-- [f8da6b5] 05-05-2025 - : implementa modelo e repositório para gerenciamento de tokens
-- [a96261d] 05-05-2025 - : adiciona relacionamento com usuário e descrição na blacklist
-- [2afd7c5] 05-05-2025 - : adiciona exceções para tratamento de tokens inválidos e não encontrados
+- [2bcac3f] 2025-05-06 - : enhance JWT authentication with blacklist support and token expiration handling
+- [2c4de0a] 2025-05-06 - " comprehensive JavaDoc comments for enhanced code documentation and maintainability"
+- [a21ca2c] 2025-05-06 - role management and API documentation enhancements
+- [288c855] 2025-05-06 - token management with pagination and status filtering
+- [f4ffdcc] 2025-05-06 - : Adicinado o TokenInvalidException
 
 ### 🔄 Alterado
-- [c881a02] 05-05-2025 - chore: version  to 1.0.1
+- [2610ed1] 2025-05-06 - "Refatora script para versÃ£o 2.0: adiciona suporte a gerenciamento de Ã­cones, configuraÃ§Ãµes Git, automaÃ§Ã£o de log e melhorias de logging."
+- [df5ca44] 2025-05-06 - "chore:  to v1.0.3 with enhanced docs, tests, and security improvements"
+- [36e4ca3] 2025-05-06 - chore:  project scripts to include GITHUB_ACTOR and improve documentation versioning
 
-### 🗑️ Removido
-- [ead0b3e] 05-05-2025 - feat:  unused import in BlacklistService interface
+### 🐛 Corrigido
+- [f80920d] 2025-05-06 - ": correct regular expression and logging inconsistencies"
+- [b74cab1] 2025-05-06 - : corrigido potencial null pointer exception no optional
 
 ### 🔒 Segurança
-- [d88aaa6] 05-05-2025 - feat: adiciona método para extrair data de expiração do token e validação da chave secreta
+- [df5ca44] 2025-05-06 - "chore: update to v1.0.3 with enhanced docs, tests, and  improvements"
+
+### 🧪 Testes
+- [df5ca44] 2025-05-06 - "chore: update to v1.0.3 with enhanced docs, s, and security improvements"
+
+### 📚 Documentação
+- [df5ca44] 2025-05-06 - "chore: update to v1.0.3 with enhanced s, tests, and security improvements"
+- [2c4de0a] 2025-05-06 - "Add comprehensive Java comments for enhanced code documentation and maintainability"
+- [a21ca2c] 2025-05-06 - Add role management and API umentation enhancements
+- [36e4ca3] 2025-05-06 - chore: update project scripts to include GITHUB_ACTOR and improve umentation versioning
+
+### 🔨 Build
+- [f80920d] 2025-05-06 - "fix: correct regular expression and logging inconsistenes"
+- [2610ed1] 2025-05-06 - "Refatora script para versÃ£o 2.0: adiona suporte a gerenciamento de Ã­cones, configuraÃ§Ãµes Git, automaÃ§Ã£o de changelog e melhorias de logging."
+- [f4ffdcc] 2025-05-06 - feat: Adinado o TokenInvalidException
+- [b74cab1] 2025-05-06 - fix: corrigido potenal null pointer exception no optional
+
+### ⚙️ Configuração
+- [2610ed1] 2025-05-06 - "Refatora script para versÃ£o 2.0: adiciona suporte a gerenciamento de Ã­cones, uraÃ§Ãµes Git, automaÃ§Ã£o de changelog e melhorias de logging."
 
 
-[Unreleased]: https://github.com/douglas-dreer/security-guard/compare/v1.0.3...main
-[v1.0.3]: https://github.com/douglas-dreer/security-guard/compare/v1.0.2...v1.0.3
-[v1.0.2]: https://github.com/douglas-dreer/security-guard/releases/tag/v1.0.2
+[Unreleased]: https://github.com/github.com/douglas-dreer/compare/v1.0.4...main
+[v1.0.4]: https://github.com/github.com/douglas-dreer/compare/v1.0.3...v1.0.4
+[v1.0.3]: https://github.com/github.com/douglas-dreer/releases/tag/v1.0.3
