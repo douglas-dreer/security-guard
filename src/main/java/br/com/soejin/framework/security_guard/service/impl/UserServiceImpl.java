@@ -1,7 +1,7 @@
 package br.com.soejin.framework.security_guard.service.impl;
 
-import br.com.soejin.framework.security_guard.controller.response.UserResponse;
 import br.com.soejin.framework.security_guard.enums.RoleTypeEnum;
+import br.com.soejin.framework.security_guard.exception.AlreadyDataRegisterException;
 import br.com.soejin.framework.security_guard.exception.NotFoundException;
 import br.com.soejin.framework.security_guard.exception.UserNotFoundException;
 import br.com.soejin.framework.security_guard.model.User;
@@ -104,14 +104,21 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
+    
+    /**
+     * Atualiza a role de um usuário existente.
+     * 
+     * @param userId ID do usuário que terá a role atualizada
+     * @param role Nova role a ser adicionada ao usuário
+     * @throws UserNotFoundException Se não encontrar um usuário com o ID informado
+     */
     @Override
     public void updateRole(Long userId, RoleTypeEnum role) {
         User userFound = userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException("Usuário não encontrado com o ID " + userId)
         );
 
-        userFound.getRoles().add(role.name());
-
+        userFound.addRole(role.getRole());
         userRepository.save(userFound);
     }
 
@@ -127,11 +134,11 @@ public class UserServiceImpl implements UserService {
         final boolean emailExists = userRepository.existsByEmail(user.getEmail());
 
         if (usernameExists) {
-            throw new NotFoundException("Username alright exist");
+            throw new AlreadyDataRegisterException("Username alright exist");
         }
 
         if (emailExists) {
-            throw new NotFoundException("Email alright exist");
+            throw new AlreadyDataRegisterException("Email alright exist");
         }
     }
 }
