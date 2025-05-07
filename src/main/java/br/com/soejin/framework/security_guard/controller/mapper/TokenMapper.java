@@ -3,13 +3,9 @@ package br.com.soejin.framework.security_guard.controller.mapper;
 import br.com.soejin.framework.security_guard.controller.response.PageResponse;
 import br.com.soejin.framework.security_guard.controller.response.TokenFullResponse;
 import br.com.soejin.framework.security_guard.controller.response.TokenResponse;
-import br.com.soejin.framework.security_guard.controller.response.UserResponse;
 import br.com.soejin.framework.security_guard.model.Token;
-import org.mapstruct.MapMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})

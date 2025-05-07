@@ -1,11 +1,13 @@
 package br.com.soejin.framework.security_guard.controller.mapper;
 
 import br.com.soejin.framework.security_guard.controller.request.CreateUserRequest;
+import br.com.soejin.framework.security_guard.controller.response.PageResponse;
 import br.com.soejin.framework.security_guard.controller.response.UserResponse;
 import br.com.soejin.framework.security_guard.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -31,5 +33,13 @@ public interface UserMapper {
     @Mapping(target = "enabled", constant = "true")
     @Mapping(target = "roles", ignore = true)
     User toEntity(CreateUserRequest createUserRequest);
+    
+
+    @Mapping(target = "content", expression = "java(userPageabled.getContent())")
+    @Mapping(target = "page", source = "userPageabled.number")
+    @Mapping(target = "pageSize", source = "userPageabled.size")
+    @Mapping(target = "totalPages", source = "userPageabled.totalPages")
+    @Mapping(target = "totalElements", source = "userPageabled.totalElements")
+    PageResponse<User> toPageResponse(Page<User> userPageabled)
 
 }

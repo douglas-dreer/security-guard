@@ -1,5 +1,7 @@
 package br.com.soejin.framework.security_guard.service;
 
+import org.springframework.data.domain.Page;
+
 import br.com.soejin.framework.security_guard.enums.RoleTypeEnum;
 import br.com.soejin.framework.security_guard.model.User;
 
@@ -70,4 +72,6 @@ public interface UserService {
      * @see br.com.soejin.framework.security_guard.enums.RoleTypeEnum
      */
     void updateRole(Long userId, RoleTypeEnum role);
+
+    Page<User> findAllWithPagination(int page, int pageSize);
 }

@@ -8,6 +8,10 @@ import br.com.soejin.framework.security_guard.model.User;
 import br.com.soejin.framework.security_guard.repository.UserRepository;
 import br.com.soejin.framework.security_guard.service.UserService;
 import jakarta.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -140,5 +144,11 @@ public class UserServiceImpl implements UserService {
         if (emailExists) {
             throw new AlreadyDataRegisterException("Email alright exist");
         }
+    }
+
+    @Override
+    public Page<User> findAllWithPagination(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return userRepository.findAll(pageable);
     }
 }

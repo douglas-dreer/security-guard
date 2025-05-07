@@ -3,11 +3,10 @@ package br.com.soejin.framework.security_guard.controller.api;
 import br.com.soejin.framework.security_guard.controller.mapper.UserMapper;
 import br.com.soejin.framework.security_guard.controller.request.UpdateRoleUserRequest;
 import br.com.soejin.framework.security_guard.controller.response.MessageResponse;
+import br.com.soejin.framework.security_guard.controller.response.PageResponse;
 import br.com.soejin.framework.security_guard.controller.response.UserResponse;
 import br.com.soejin.framework.security_guard.model.User;
 import br.com.soejin.framework.security_guard.service.UserService;
-import br.com.soejin.framework.security_guard.util.JwtUtil;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,15 +16,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+
 
 @RestController
 @RequestMapping("/users")
@@ -133,5 +134,18 @@ public class UserController {
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );
+    }
+
+    @GetMapping(params = { "page", "pageSize" })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> findAllWithPagination(
+        @Parameter(description = "Número da página (iniciando em 0)") @RequestParam(value = "page", defaultValue = "0") int page,
+        @Parameter(description = "Quantidade de registros por página") @RequestParam(value = "pageSize", defaultValue = "50") int pageSize        
+    ) {
+        Page<User> userPageabled = userService.findAllWithPagination(page, pageSize);
+
+        PageResponse<User> pageResponse = userMapper.toPageResponse(userPageabled);
+        return ResponseEntity.ok(pageResponse);
+        
     }
 }
