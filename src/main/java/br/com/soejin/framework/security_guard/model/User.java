@@ -21,12 +21,6 @@ import java.util.stream.Collectors;
  * Classe de entidade que representa um usuário no sistema.
  * Esta classe implementa a interface UserDetails para integração com o Spring Security.
  * Contém todas as informações relacionadas ao usuário, incluindo detalhes de autenticação e autorização.
- * 
- * Princípios aplicados:
- * - SRP: Separação de responsabilidades relacionadas à autenticação vs. gerenciamento de usuário
- * - Encapsulamento: Proteção do estado interno usando métodos específicos
- * - Imutabilidade: Retorno de coleções imutáveis para evitar modificação externa
- * 
  * @see org.springframework.security.core.userdetails.UserDetails
  * @see org.springframework.security.core.GrantedAuthority
  */
