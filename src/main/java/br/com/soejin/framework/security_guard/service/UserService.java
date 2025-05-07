@@ -1,6 +1,5 @@
 package br.com.soejin.framework.security_guard.service;
 
-import br.com.soejin.framework.security_guard.controller.response.UserResponse;
 import br.com.soejin.framework.security_guard.enums.RoleTypeEnum;
 import br.com.soejin.framework.security_guard.model.User;
 
