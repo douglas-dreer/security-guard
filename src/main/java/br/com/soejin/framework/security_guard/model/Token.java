@@ -3,6 +3,7 @@ package br.com.soejin.framework.security_guard.model;
 import br.com.soejin.framework.security_guard.enums.TokenTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
